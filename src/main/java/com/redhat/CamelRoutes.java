@@ -14,15 +14,10 @@ import org.springframework.stereotype.Component;
 public class CamelRoutes extends RouteBuilder {
 	
 	@Autowired
-    private CamelContext camelContext;
+  private CamelContext camelContext;
 	
-	//private static final String SERVICE_ADDRESS = "http://localhost:8080/ws/location";
-	//private static final String WSDL_URL = "http://localhost:8080/ws/location?wsdl";
-
 	@Override
 	public void configure() throws Exception {
-		
-		
 		
 		restConfiguration()
 			.component("servlet")
@@ -33,40 +28,38 @@ public class CamelRoutes extends RouteBuilder {
 	    	.enableCORS(true)
 	    	.apiContextPath("/api-doc")
 	    	.apiProperty("api.title", "Location API")
-	    	.apiProperty("api.version", "1.0.0")
-	    ;
+	    	.apiProperty("api.version", "1.0.0");
 		
-		
-	
-		rest("/location").description("Location information")
-			.produces("application/json")
-			.get("/contact/{id}").description("Location Contact Info")
-				.responseMessage().code(200).message("Data successfully returned").endResponseMessage()
-				.to("direct:getalllocationphone")
-			
-		;
-		
-		from("direct:getalllocationphone")
-			.setBody().simple("${headers.id}")
-			.unmarshal().json(JsonLibrary.Jackson)
-			.to("cxf://http://location-soap:8080/ws/location?serviceClass=com.redhat.LocationDetailServicePortType&defaultOperationName=contact")
-			
-			.process(
-					new Processor(){
 
-						@Override
-						public void process(Exchange exchange) throws Exception {
-							//LocationDetail locationDetail = new LocationDetail();
-							//locationDetail.setId(Integer.valueOf((String)exchange.getIn().getHeader("id")));
+
+		// LOCATION REST ROUTE
+
+    // rest("/location").description("Location information")
+    //     .produces("application/json")
+    //     .get("/contact/{id}").description("Location Contact Info")
+    //         .responseMessage().code(200).message("Data successfully returned").endResponseMessage()
+    //         .to("direct:getalllocationphone");
+
+
+
+
+		// CXF SERVICE
+
+		// from("direct:getalllocationphone")
+		// 	.setBody().simple("${headers.id}")
+		// 	.unmarshal().json(JsonLibrary.Jackson)
+		// 	.to("cxf://http://location-soap:8080/ws/location?serviceClass=com.redhat.LocationDetailServicePortType&defaultOperationName=contact")
+		// 	.process(
+		// 			new Processor(){
+
+		// 				@Override
+		// 				public void process(Exchange exchange) throws Exception {
+		// 					MessageContentsList list = (MessageContentsList)exchange.getIn().getBody();
 							
-							MessageContentsList list = (MessageContentsList)exchange.getIn().getBody();
-							
-							exchange.getOut().setBody((ContactInfo)list.get(0));
-						}
-					}
-			)
-			
-		;
+		// 					exchange.getOut().setBody((ContactInfo)list.get(0));
+		// 				}
+		// 			}
+		// 	);
 	
 	}
 	
