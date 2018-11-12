@@ -165,7 +165,7 @@
 					<sourceRoot>${basedir}/src/main/java</sourceRoot>
 						<wsdlOptions>
 							<wsdlOption>
-								<wsdl>http://localhost:8080/ws/location?wsdl</wsdl>
+								<wsdl>http://location-soap:8080/ws/location?wsdl</wsdl>
 							</wsdlOption>
 						</wsdlOptions>
 				</configuration>
