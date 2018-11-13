@@ -1,0 +1,100 @@
+{
+	"v": "4.0",
+	"workspace": {
+		"environments": {
+			"default": {
+				"recipe": {
+					"type": "dockerimage",
+					"content": "docker.io/davidmartin/ubuntu_jdk8:waterford-eca3"
+				},
+				"machines": {
+					"dev-machine": {
+						"env": {
+							"MAVEN_OPTS": "-Xmx512m"
+						},
+						"servers": {
+							"8080/tcp": {
+								"attributes": {},
+								"protocol": "http",
+								"port": "8080"
+							},
+							"8000/tcp": {
+								"attributes": {},
+								"protocol": "http",
+								"port": "8000"
+							},
+							"9000/tcp": {
+								"attributes": {},
+								"protocol": "http",
+								"port": "9000"
+							},
+							"9001/tcp": {
+								"attributes": {},
+								"protocol": "http",
+								"port": "9001"
+							}
+						},
+						"volumes": {},
+						"installers": [
+							"org.eclipse.che.exec",
+							"org.eclipse.che.terminal",
+							"org.eclipse.che.ws-agent",
+							"org.eclipse.che.ls.camel"
+						],
+						"attributes": {
+							"memoryLimitBytes": "2147483648"
+						}
+					}
+				}
+			}
+		},
+		"commands": [{
+				"commandLine": "mvn install -f ${current.project.path}",
+				"name": "Build project",
+				"type": "mvn",
+				"attributes": {
+					"goal": "Build",
+					"previewUrl": ""
+				}
+			},
+			{
+				"commandLine": "mvn spring-boot:run -f ${current.project.path}",
+				"name": "run spring-boot",
+				"type": "mvn",
+				"attributes": {
+					"goal": "Run",
+					"previewUrl": "${server.9000/tcp}"
+				}
+			},
+			{
+				"commandLine": "mvn camel-restdsl-swagger:generate -f ${current.project.path}",
+				"name": "Generate REST DSL from Swagger",
+				"type": "mvn",
+				"attributes": {
+					"goal": "Build",
+					"previewUrl": ""
+				}
+			},
+			{
+				"commandLine": "mvn generate-sources -f ${current.project.path}",
+				"name": "run generate-sources",
+				"type": "mvn",
+				"attributes": {
+					"goal": "Build",
+					"previewUrl": ""
+				}
+			},
+			{
+				"commandLine": "cd ${explorer.current.file.path} && mvn fabric8:deploy",
+				"name": "fabric8:deploy",
+				"type": "mvn",
+				"attributes": {
+					"goal": "Deploy",
+					"previewUrl": ""
+				}
+			}
+		],
+		"defaultEnv": "default",
+		"name": "default"
+	}
+}
