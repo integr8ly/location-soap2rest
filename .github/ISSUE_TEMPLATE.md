@@ -9,10 +9,8 @@
 
 ## Environment
 
-* NodeJS version:
-<!-- Run the command `node -v` and add the result here. -->
-* Npm version:
-<!-- Run the command `npm -v` and add the result here. -->
+* Java version:
+* Maven version:
 * Project Version/Tag: (E.g release-1.0.1)
 
 ## Steps to reproduce
